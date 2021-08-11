@@ -1,10 +1,13 @@
-import Users from './Users';
+import MiniDrawer from './MiniDrawer';
+
 import './App.css';
 
-function App() {
+const App = () => {
 
   return (
-    <h1>App Component</h1>
+    <>
+      <MiniDrawer />
+    </>
   );
 }
 
