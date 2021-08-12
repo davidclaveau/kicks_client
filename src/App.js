@@ -1,13 +1,9 @@
-import MiniDrawer from './MiniDrawer';
-
+import Dashboard from './Dashboard';
 import './App.css';
 
 const App = () => {
-
   return (
-    <>
-      <MiniDrawer />
-    </>
+    <Dashboard />
   );
 }
 

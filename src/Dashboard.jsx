@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import Navigation from './Navigation'
-import Content from './Content'
+import { ComponentContext } from './contexts/componentContext'
+
+import Home from './pages/Home';
+import Navigation from './Navigation';
+import Content from './Content';
 
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -79,10 +82,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MiniDrawer = () => {
+const Dashboard = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const [component, setComponent] = useState(<Home />)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,7 +118,7 @@ const MiniDrawer = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Mini variant drawer
+            BC Government Employees Co-ed Soccer Society
           </Typography>
         </Toolbar>
       </AppBar>
@@ -132,18 +136,21 @@ const MiniDrawer = () => {
         }}
       >
         <div className={classes.toolbar}>
-          <Typography variant="h5">BCGECSS</Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
-        <Navigation />
+        <ComponentContext.Provider value={{component, setComponent}}>
+          <Navigation />
+        </ComponentContext.Provider>
       </Drawer>
       <main>
-        <Content />
+        <ComponentContext.Provider value={{component, setComponent}}>
+          <Content />
+        </ComponentContext.Provider>
       </main>
     </div>
   );
 };
 
-export default MiniDrawer;
+export default Dashboard;
