@@ -4,6 +4,7 @@ import { ComponentContext } from "./contexts/componentContext";
 import Home from './pages/Home'
 import Notices from './pages/Notices'
 import Schedule from './pages/Schedule'
+import Teams from './pages/Teams'
 
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -65,7 +66,7 @@ const Navigation = () => {
         </ListItem>
       </List>
       <List>
-        <ListItem button key={'Teams'}>
+        <ListItem button key={'Teams'} onClick={() => setComponent(<Teams />)}>
           <ListItemIcon>
             <TeamsIcon />
           </ListItemIcon>
