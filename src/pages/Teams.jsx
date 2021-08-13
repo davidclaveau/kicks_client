@@ -26,6 +26,7 @@ const Teams = () => {
     return (
       <Team
         key={team.id}
+        id={team.id}
         teamName={team.name}
         managerID={team.manager.manager_id}
         managerFirstName={team.manager.manager_first_name}
