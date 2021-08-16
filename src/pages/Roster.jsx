@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-
+import Player from './Player'
+import './Roster.css'
 
 const Roster = (props) => {
-  const [rosters, setRoster] = useState([])
+  const [roster, setRoster] = useState([])
 
   const apiURL = 'http://localhost:3001/api/v1'
   
@@ -14,27 +14,26 @@ const Roster = (props) => {
   
   async function getRoster() {
     try {
-      const response = await axios.get(`${apiURL}/rosters`);
+      const response = await axios.get(`${apiURL}/rosters/${props.id}`);
       setRoster(response.data);
     } catch (error) {
       console.error(error);
     }
   }
 
-  console.log("rosters", rosters)
+  console.log("roster", roster)
 
-  // const rosterMap = rosters.map(team => {
-  //   return (
-  //     <Team
-  //       key={team.id}
-  //       id={team.id}
-  //       teamName={team.name}
-  //       managerID={team.manager.manager_id}
-  //       managerFirstName={team.manager.manager_first_name}
-  //       managerLastName={team.manager.manager_last_name}
-  //     />
-  //   )
-  // })
+  const rosterMap = roster.map(player => {
+    return (
+      <Player
+        key={player.id}
+        firstName={player.user.first_name}
+        lastName={player.user.last_name}
+        publicSector={player.user.public_sector}
+        winterTeam={player.user.winter_team}
+      />
+    )
+  })
 
 
   return (
@@ -42,7 +41,17 @@ const Roster = (props) => {
       This is the Roster component.
 
       <h5>
-        {props.id}
+        {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}
+        <table className="tableClass">
+          <tbody>
+            <tr>
+              <th>Player</th>
+              <th>Winter Team</th>
+              <th>Public Sector</th>
+            </tr>
+            {rosterMap}
+          </tbody>
+        </table>
       </h5>
     </div>
   )

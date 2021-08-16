@@ -23,7 +23,7 @@ const Schedule = () => {
 
   console.log("schedule", schedule)
 
-  const games = schedule.map(game => {
+  const gamesMap = schedule.map(game => {
     return (
       <Game 
         key={game.id}
@@ -32,6 +32,7 @@ const Schedule = () => {
         field={game.field}
         gameTime={game.game_time}
         gameDate={game.game_date}
+        holiday={game.holiday}
       />
     )
   })  
@@ -39,9 +40,18 @@ const Schedule = () => {
   return (
     <div>
       This is the Schedules component.
-      <ul>
-        {games}
-      </ul>
+      <table className="tableClass">
+        <tbody>
+          <tr>
+            <th>Game Date</th>
+            <th>Game Time</th>
+            <th>Away Team</th>
+            <th>Home Team</th>
+            <th>Field</th>
+          </tr>
+          {gamesMap}
+        </tbody>
+      </table>
     </div>
   )
 }; 

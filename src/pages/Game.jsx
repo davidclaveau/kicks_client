@@ -1,23 +1,25 @@
 const Game = (props) => {
+
+  if (props.holiday) {
+    return (
+      <tr>
+        <td>Holiday</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+      </tr>
+    )
+  }
+
   return (
-    <table>
-      <tbody>
-        <tr>
-          <th>Game Date</th>
-          <th>Game Time</th>
-          <th>Away Team</th>
-          <th>Home Team</th>
-          <th>Field</th>
-        </tr>
-        <tr>
-          <td>{props.gameDate}</td>
-          <td>{props.gameTime}</td>
-          <td>{props.awayTeam}</td>
-          <td>{props.homeTeam}</td>
-          <td>{props.field}</td>
-        </tr>
-      </tbody>
-    </table>
+    <tr>
+      <td>{props.gameDate}</td>
+      <td>{props.gameTime}</td>
+      <td>{props.awayTeam}</td>
+      <td>{props.homeTeam}</td>
+      <td>{props.field}</td>
+    </tr>
   )
 }
 
