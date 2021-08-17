@@ -1,13 +1,8 @@
-import React, { useContext } from 'react';
-import { ComponentContext } from "./contexts/componentContext";
+import React from 'react';
+import {
+  withRouter,
+} from 'react-router-dom'
 
-import Home from './pages/Home'
-import Notices from './pages/Notices'
-import Schedule from './pages/Schedule'
-import Teams from './pages/Teams'
-
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -28,135 +23,99 @@ import SponsorsIcon from '@material-ui/icons/AccountBalance';
 import ContactsIcon from '@material-ui/icons/RecentActors';
 import LoginIcon from '@material-ui/icons/LockOpen';
 
-const Navigation = () => {
-  const { setComponent } = useContext(ComponentContext);
+const Navigation = (props) => {
+  const { history } = props;
+  const dashboardList = [
+    {  
+      text: 'Home',
+      icon: <HomeIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Notices',
+      icon: <NoticeIcon />,
+      onClick: () => history.push('/notices')
+    },
+    {
+      text: 'Schedule',
+      icon: <ScheduleIcon />,
+      onClick: () => history.push('/schedule')
+    },
+    {
+      text: 'Map',
+      icon: <MapIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Teams',
+      icon: <TeamsIcon />,
+      onClick: () => history.push('/teams')
+    },
+    {
+      text: 'Scrimmage',
+      icon: <ScrimmageIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Safety',
+      icon: <SafetyIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Awards',
+      icon: <AwardsIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Rules',
+      icon: <RulesIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Membership',
+      icon: <MembershipIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Discipline',
+      icon: <DisciplineIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Documents',
+      icon: <DocumentsIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Sponsorship',
+      icon: <SponsorsIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Contacts',
+      icon: <ContactsIcon />,
+      onClick: () => history.push('/')
+    },
+    {
+      text: 'Login',
+      icon: <LoginIcon />,
+      onClick: () => history.push('/')
+    }
+  ]
 
   return (
     <>
-      <List>
-        <ListItem button key={'Home'} onClick={() => setComponent(<Home />)} >
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Home'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Notices'} onClick={() => setComponent(<Notices />)}>
-          <ListItemIcon>
-            <NoticeIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Notices'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Schedule'} onClick={() => setComponent(<Schedule />)}>
-          <ListItemIcon>
-            <ScheduleIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Schedule'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Maps'}>
-          <ListItemIcon>
-            <MapIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Maps to Fields'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Teams'} onClick={() => setComponent(<Teams />)}>
-          <ListItemIcon>
-            <TeamsIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Team'} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button key={'Over40s'}>
-          <ListItemIcon>
-            <ScrimmageIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Over-40s: Scrims'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'PlayerSafety'}>
-          <ListItemIcon>
-            <SafetyIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Player Safety'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Awards'}>
-          <ListItemIcon>
-            <AwardsIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Awards'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'LeagueRules'}>
-          <ListItemIcon>
-            <RulesIcon />
-          </ListItemIcon>
-          <ListItemText primary={'League Rules'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Membership'}>
-          <ListItemIcon>
-            <MembershipIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Membership'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Discipline'}>
-          <ListItemIcon>
-            <DisciplineIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Discipline'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Documents'}>
-          <ListItemIcon>
-            <DocumentsIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Documents'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Sponsors'}>
-          <ListItemIcon>
-            <SponsorsIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Sponsors'} />
-        </ListItem>
-      </List>
-      <List>
-        <ListItem button key={'Contacts'}>
-          <ListItemIcon>
-            <ContactsIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Contacts'} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button key={'Login'}>
-          <ListItemIcon>
-            <LoginIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Login'} />
-        </ListItem>
-      </List>
+      {dashboardList.map((nav => {
+        const { text,  icon, onClick } = nav;
+        return (
+          <ListItem button key={text} onClick={onClick}>
+            <ListItemIcon>{icon}</ListItemIcon>
+          <ListItemText primary={text} />
+          </ListItem>
+        )
+      }))}
     </>
   )
-}
+};
 
-export default Navigation
+export default withRouter(Navigation);
