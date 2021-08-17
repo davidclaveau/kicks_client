@@ -23,6 +23,8 @@ import SponsorsIcon from '@material-ui/icons/AccountBalance';
 import ContactsIcon from '@material-ui/icons/RecentActors';
 import LoginIcon from '@material-ui/icons/LockOpen';
 
+// Contains all of the icons and Router history for the links
+// Can add or remove additional icons and links in the dashboardList array
 const Navigation = (props) => {
   const { history } = props;
   const dashboardList = [

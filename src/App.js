@@ -9,7 +9,7 @@ import Home from './pages/Home';
 import Notices from './pages/Notices';
 import Schedule from './pages/Schedule';
 import Teams from './pages/Teams';
-import Roster from './pages/Schedule';
+import Roster from './pages/Roster';
 
 import { makeStyles } from '@material-ui/core/styles'
 import './App.css';
@@ -36,7 +36,7 @@ const App = () => {
             <Route exact path='/schedule' render={props =>  <Schedule {...props} />} />
             <Route exact path='/map' render={props =>  <Notices {...props} />} />
             <Route exact path='/teams' render={props =>  <Teams {...props} />} />
-            <Route exact path='/roster' render={props =>  <Roster {...props} />} />
+            <Route exact path='/roster/:id' render={props =>  <Roster {...props} />} />
 
             <Route exact path='/scrimmage' render={props =>  <Notices {...props} />} />
             <Route exact path='/safety' render={props =>  <Notices {...props} />} />

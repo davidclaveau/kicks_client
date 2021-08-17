@@ -82,7 +82,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// Render the drawer navigation on the top and left of the website
+// Currently set to be open by default (setOpen(true))
+// The Navigation component holds all icons and links for pages
 const Dashboard = () => {
   const classes = useStyles();
   const theme = useTheme();

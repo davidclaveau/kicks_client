@@ -3,9 +3,10 @@ import axios from 'axios';
 import Player from './Player'
 import './Roster.css'
 
+// Provide player information for each team
+// Roster ID is passed as location.state.id from the Team component
 const Roster = (props) => {
   const [roster, setRoster] = useState([])
-
   const apiURL = 'http://localhost:3001/api/v1'
   
   useEffect(() => {
@@ -14,14 +15,12 @@ const Roster = (props) => {
   
   async function getRoster() {
     try {
-      const response = await axios.get(`${apiURL}/rosters/${props.id}`);
+      const response = await axios.get(`${apiURL}/rosters/${props.location.state.id}`);
       setRoster(response.data);
     } catch (error) {
       console.error(error);
     }
   }
-
-  console.log("roster", roster)
 
   const rosterMap = roster.map(player => {
     return (
