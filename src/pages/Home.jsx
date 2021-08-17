@@ -1,11 +1,11 @@
-import Typography from '@material-ui/core/Typography';
+import { Typography } from '@material-ui/core';
 
 const Home = () => {
   return (
     <div>
-      <Typography variant="h3">OUR MISSION</Typography>
+      <Typography variant="h4">OUR MISSION</Typography>
       <Typography paragraph>To encourage players of all levels of ability to play soccer in a relaxed, friendly environment.</Typography>
-      <Typography variant="h3">WHO WE ARE</Typography>
+      <Typography variant="h4">WHO WE ARE</Typography>
       <Typography paragraph>
         The BC Government Employees Co-ed Soccer Society (BCGECSS) is a co-ed recreational soccer league for the enjoyment of all government workers.
 

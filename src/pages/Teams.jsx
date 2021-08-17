@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Team from './Team';
 
-const Teams = () => {
-  const [teams, setTeams] = useState([])
+// Render all teams in the league using the Team component
+// Provide the team name, manager, and manager name
+const Teams = (props) => {
+  const [teams, setTeams] = useState([]);
 
-  const apiURL = 'http://localhost:3001/api/v1'
+  const apiURL = 'http://localhost:3001/api/v1';
   
   useEffect(() => {
     getTeams()
-  }, [])
+  }, []);
   
   async function getTeams() {
     try {
@@ -18,9 +20,7 @@ const Teams = () => {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  console.log("teams", teams)
+  };
 
   const teamMap = teams.map(team => {
     return (

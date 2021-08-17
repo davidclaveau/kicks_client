@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { ComponentContext } from './contexts/componentContext'
-
-import Home from './pages/Home';
 import Navigation from './Navigation';
-import Content from './Content';
-
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  makeStyles,
+  useTheme,
+  Drawer,
+  AppBar,
+  Toolbar,
+  CssBaseline,
+  Typography,
+  IconButton      
+} from '@material-ui/core/';
 
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { 
+  Menu,
+  ChevronLeft,
+  ChevronRight
+} from '@material-ui/icons/';
 
 const drawerWidth = 240;
 
@@ -82,11 +82,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Render the drawer navigation on the top and left of the website
+// Currently set to be open by default (setOpen(true))
+// The Navigation component holds all icons and links for pages
 const Dashboard = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
-  const [component, setComponent] = useState(<Home />)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -115,7 +117,7 @@ const Dashboard = () => {
               [classes.hide]: open,
             })}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
             BC Government Employees Co-ed Soccer Society
@@ -137,17 +139,12 @@ const Dashboard = () => {
       >
         <div className={classes.toolbar}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
         </div>
-        <ComponentContext.Provider value={{component, setComponent}}>
-          <Navigation />
-        </ComponentContext.Provider>
+        <Navigation closeDrawer={() => handleDrawerClose()}/>
       </Drawer>
       <main>
-        <ComponentContext.Provider value={{component, setComponent}}>
-          <Content />
-        </ComponentContext.Provider>
       </main>
     </div>
   );

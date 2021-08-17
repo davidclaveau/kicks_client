@@ -1,26 +1,29 @@
-import { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { ComponentContext } from '../contexts/componentContext';
+import { withRouter } from 'react-router-dom'
 
-import Roster from './Roster';
 
+// Render each individual team in the league in Teams component
+// Provide onClick to send user to team roster
 const Team = (props) => {
-  const { setComponent } = useContext(ComponentContext);
+  const { history } = props
 
   return (
-    <>
-      <li>
-        <Typography variant="h3">
-          <div onClick={() => {setComponent(<Roster id={props.id}/>)}}>
-            {props.teamName}
-          </div>
-        </Typography>
-        <Typography variant="h5">
-          {props.managerFirstName} {props.managerLastName}
-        </Typography>
-      </li>
-    </>
+    <li>
+      <Typography variant="h3">
+        <div onClick={() => history.push(
+          {
+            pathname: `/roster/${props.id}`,
+            state: { id: props.id }
+          }
+        )}>
+          {props.teamName}
+        </div>
+      </Typography>
+      <Typography variant="h5">
+        {props.managerFirstName} {props.managerLastName}
+      </Typography>
+    </li>
   )
 }
 
-export default Team;
+export default withRouter(Team);
