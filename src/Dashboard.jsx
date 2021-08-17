@@ -142,7 +142,7 @@ const Dashboard = () => {
             {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
           </IconButton>
         </div>
-        <Navigation />
+        <Navigation closeDrawer={() => handleDrawerClose()}/>
       </Drawer>
       <main>
       </main>

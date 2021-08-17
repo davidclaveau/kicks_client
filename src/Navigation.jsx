@@ -27,6 +27,14 @@ import LoginIcon from '@material-ui/icons/LockOpen';
 // Can add or remove additional icons and links in the dashboardList array
 const Navigation = (props) => {
   const { history } = props;
+
+  // Optional function to close drawer after selecting page
+  // Just need to change the history.push to call this function instead
+  // const historyAndCloseDrawer = (url) => {
+  //   history.push(url);
+  //   props.closeDrawer();
+  // }
+
   const dashboardList = [
     {  
       text: 'Home',
@@ -56,17 +64,17 @@ const Navigation = (props) => {
     {
       text: 'Scrimmage',
       icon: <ScrimmageIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/scrimmage')
     },
     {
       text: 'Safety',
       icon: <SafetyIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/safety')
     },
     {
       text: 'Awards',
       icon: <AwardsIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/awards')
     },
     {
       text: 'Rules',
