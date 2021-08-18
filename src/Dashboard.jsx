@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from './contexts/userContext'
 import Navigation from './Navigation';
 import clsx from 'clsx';
 import {
@@ -17,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from '@material-ui/icons/';
+
 
 const drawerWidth = 240;
 
@@ -86,9 +88,12 @@ const useStyles = makeStyles((theme) => ({
 // Currently set to be open by default (setOpen(true))
 // The Navigation component holds all icons and links for pages
 const Dashboard = () => {
+  const {user} = useContext(UserContext);
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+
+  console.log("user", user)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -120,7 +125,7 @@ const Dashboard = () => {
             <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
-            BC Government Employees Co-ed Soccer Society
+            BC Government Employees Co-ed Soccer Society - {user.user ? `Welcome ${user.user.first_name }`: "Welcome"}
           </Typography>
         </Toolbar>
       </AppBar>

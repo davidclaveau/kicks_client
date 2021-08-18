@@ -109,7 +109,12 @@ const Navigation = (props) => {
     {
       text: 'Login',
       icon: <LoginIcon />,
-      onClick: () => history.push('/')
+      onClick: () => history.push('/login')
+    },
+    {
+      text: 'Signup',
+      icon: <LoginIcon />,
+      onClick: () => history.push('/signup')
     }
   ]
 
