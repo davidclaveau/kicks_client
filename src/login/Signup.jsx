@@ -12,7 +12,10 @@ const Signup = () => {
 
   const { setUser } = useContext(UserContext)
 
-  const handleSignup = () => {
+  const handleSignup = (event) => {
+    event.preventDefault();
+
+    // Make sure passwords match before attempting signup
     if (password === passwordConfirmation) {
       axios
         .post("http://localhost:3001/api/v1/users", {
@@ -27,9 +30,8 @@ const Signup = () => {
         { withCredentials: true}
         )
         .then(response => {
-          console.log("response from login", response)
           if  (response.data.status === "created") {
-            console.log("response", response.data.user)
+            // If status comes back OK, log user in as well
             setUser({
               loggedInStatus: "LOGGED_IN",
               user: response.data.user
@@ -45,12 +47,11 @@ const Signup = () => {
       console.log("passwords don't match")
     }
   };
-  
 
   return (
     <div>
       <h1>Log In</h1>        
-      <form onSubmit={(event) => event.preventDefault()}>
+      <form onSubmit={handleSignup}>
         <input
           placeholder="first name"
           type="text"
@@ -93,7 +94,7 @@ const Signup = () => {
           value={passwordConfirmation}
           onChange={event => {setPasswordConfirmation(event.target.value)}}
         />         
-        <button placeholder="submit" type="submit" onClick={handleSignup}>Signup</button>          
+        <button placeholder="submit" type="submit">Signup</button>          
       </form>
     </div>
   )

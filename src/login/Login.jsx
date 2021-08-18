@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../contexts/userContext'
 
-const Login = () => {
+const Login = (props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
   const {setUser} = useContext(UserContext);
+  const { history } = props;
 
-  const handleLogin = () => {
+  const handleLogin = (event) => {
+    event.preventDefault();
+
     axios
       .post("http://localhost:3001/login", {
         user: {
@@ -20,25 +24,35 @@ const Login = () => {
       )
       .then(response => {
         console.log("response from login", response)
-        if  (response.data.logged_in) {
+        if (response.data.logged_in) {
           console.log("response", response.data.user)
           setUser({
             loggedInStatus: "LOGGED_IN",
             user: response.data.user
           })
+          history.push('/')
         } else {
-          console.log("not logged in")
+          setError({
+            message: response.data.errors[0],
+            code: response.data.status
+          })
         }
       })
       .catch(error => {
         console.log("error", error)
       });
+
+    setEmail("")
+    setPassword("")
   };
   
   return (
     <div>
       <h1>Log In</h1>        
-      <form onSubmit={event => event.preventDefault()}>
+      <span>
+        {error ? `${error.code} - ${error.message}` : ""}
+      </span>
+      <form onSubmit={handleLogin}>
         <input
           placeholder="email"
           type="text"
@@ -53,7 +67,7 @@ const Login = () => {
           value={password}
           onChange={event => {setPassword(event.target.value)}}
         />         
-        <button placeholder="submit" type="submit" onClick={handleLogin}>Log In</button>          
+        <button placeholder="submit" type="submit">Log In</button>          
         <div>
           or <Link to='/signup'>sign up</Link>
         </div>
