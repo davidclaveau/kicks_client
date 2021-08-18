@@ -26,6 +26,7 @@ import './App.css';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
+    justifyContent: 'center'
   },
   content: {
     marginTop: '64px'
@@ -44,10 +45,11 @@ const App = () => {
 
   const loginStatus = () => {
     axios
-      .get('http://localhost:3001/logged_in', {withCredentials:true})
+      .get('http://localhost:3001/logged_in',
+        {withCredentials:true})
       .then(response => {
         if (response.data.logged_in) {
-          handleLogin(response)
+          handleLogin(response.data)
         } else {
           handleLogout()
         }
@@ -56,6 +58,7 @@ const App = () => {
   };
 
   const handleLogin = (data) => {
+    console.log("data", data)
     setUser({
       isLoggedIn: true,
       user: data.user

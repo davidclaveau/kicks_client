@@ -123,7 +123,7 @@ const Dashboard = () => {
             <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
-            BC Government Employees Co-ed Soccer Society {user.isLoggedIn ? `- Welcome ${user.user.first_name }`: "" }
+            BC Government Employees Co-ed Soccer Society {user.isLoggedIn && `- Welcome ${user.user.first_name }`}
           </Typography>
         </Toolbar>
       </AppBar>
