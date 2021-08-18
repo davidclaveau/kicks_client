@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../contexts/userContext'
 
-const handleSubmit = (event) => {
-  event.preventDefault()
-};
-
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const {user, setUser} = useContext(UserContext);
+  const {setUser} = useContext(UserContext);
 
   const handleLogin = () => {
     axios
