@@ -20,8 +20,6 @@ const Users = () => {
     }
   }
 
-  console.log("users", users)
-
   const userMap = users.map(user => {
     return (
       <User

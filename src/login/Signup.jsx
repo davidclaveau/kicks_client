@@ -34,7 +34,7 @@ const Signup = () => {
           if  (response.data.status === "created") {
             // If status comes back OK, log user in as well
             setUser({
-              loggedInStatus: "LOGGED_IN",
+              isLoggedIn: true,
               user: response.data.user
             })
           } else {

@@ -93,8 +93,6 @@ const Dashboard = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
 
-  console.log("user", user)
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -125,7 +123,7 @@ const Dashboard = () => {
             <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
-            BC Government Employees Co-ed Soccer Society - {user.user ? `Welcome ${user.user.first_name }`: "Welcome"}
+            BC Government Employees Co-ed Soccer Society {user.isLoggedIn ? `- Welcome ${user.user.first_name }`: "" }
           </Typography>
         </Toolbar>
       </AppBar>

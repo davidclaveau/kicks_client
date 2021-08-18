@@ -69,6 +69,8 @@ const App = () => {
   }
 
   const classes = useStyles();
+
+  console.log("current user", user)
   return (
     <UserContext.Provider value={{user, setUser}}>
       <Router>

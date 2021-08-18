@@ -23,11 +23,9 @@ const Login = (props) => {
       { withCredentials: true}
       )
       .then(response => {
-        console.log("response from login", response)
         if (response.data.logged_in) {
-          console.log("response", response.data.user)
           setUser({
-            loggedInStatus: "LOGGED_IN",
+            isLoggedIn: true,
             user: response.data.user
           })
           history.push('/')

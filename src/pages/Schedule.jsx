@@ -21,8 +21,6 @@ const Schedule = () => {
     }
   }
 
-  console.log("schedule", schedule)
-
   const gamesMap = schedule.map(game => {
     return (
       <Game 
