@@ -18,7 +18,7 @@ import Scrimmage from './pages/Scrimmage';
 import Safety from './pages/Safety';
 import Awards from './pages/Awards';
 import Login from './login/Login';
-import Signup from './login/Signup';
+import SignupRevamp from './login/Signup';
 
 import { makeStyles } from '@material-ui/core/styles'
 import './App.css';
@@ -29,7 +29,8 @@ const useStyles = makeStyles({
     justifyContent: 'center'
   },
   content: {
-    marginTop: '64px'
+    marginTop: '64px',
+    paddingBottom: '50px'
   }
 })
 
@@ -99,7 +100,7 @@ const App = () => {
                 <Route exact path='/contacts' render={props =>  <Notices {...props} />} />
 
                 <Route exact path='/login' render={props =>  <Login {...props} />}/>
-                <Route exact path='/signup' render={props =>  <Signup {...props} />}/>
+                <Route exact path='/signup' render={props =>  <SignupRevamp {...props} />}/>
               </Switch>
           </div>
         </div>
