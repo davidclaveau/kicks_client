@@ -9,6 +9,7 @@ const Signup = () => {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
+  const [error, setError] = useState("")
 
   const { setUser } = useContext(UserContext)
 
@@ -37,20 +38,29 @@ const Signup = () => {
               user: response.data.user
             })
           } else {
-            console.log("not logged in")
+            setError({
+              message: response.data.errors[0], 
+              code: response.data.status
+            })
           }
         })
         .catch(error => {
           console.log("error", error)
         });
     } else {
-      console.log("passwords don't match")
+      setError({
+        message: "Passwords don't match", 
+        code: "403"
+      })
     }
   };
 
   return (
     <div>
-      <h1>Log In</h1>        
+      <h1>Signup</h1>
+      <span>
+        {error ? `${error.code} - ${error.message}` : ""}
+      </span>       
       <form onSubmit={handleSignup}>
         <input
           placeholder="first name"
