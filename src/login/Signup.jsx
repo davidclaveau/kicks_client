@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../contexts/userContext'
 
 import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -32,6 +33,15 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  alert: {
+    width: '100%',
+    marginTop: theme.spacing(1)
+  },
+  alertList: {
+    width: '100%',
+    listStyle: 'none',
+    paddingLeft: '0'
+  }
 }));
 
 const Signup = (props) => {
@@ -74,8 +84,9 @@ const Signup = (props) => {
             })
             history.push('/')
           } else {
+            // Spread the array of errors to share to user
             setError({
-              message: response.data.errors[0], 
+              messages: [...response.data.errors], 
               code: response.data.status
             })
           }
@@ -85,7 +96,7 @@ const Signup = (props) => {
         });
     } else {
       setError({
-        message: "Passwords don't match", 
+        messages: ["Passwords Do Not Match - Please Try Again"], 
         code: "403"
       })
     }
@@ -101,10 +112,19 @@ const Signup = (props) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <span>
-          {error ? `${error.code} - ${error.message}` : ""}
-        </span>    
-        <form className={classes.form} noValidate onSubmit={handleSignup}>
+        {error && 
+          <ul className={classes.alertList}>
+            {error.messages.map(message => {
+              return (
+                <li>
+                  <Alert className={classes.alert} variant="filled" severity="error">{message}
+                  </Alert>
+                </li>
+              )
+            })}
+          </ul>
+        }
+        <form className={classes.form} onSubmit={handleSignup}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
