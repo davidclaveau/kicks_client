@@ -48,7 +48,6 @@ const Navigation = (props) => {
       { withCredentials: true}
       )
       .then(response => {
-        console.log("response nav", response)
         if  (response.data.status) {
           // If status comes back OK, log user in as well
           setUser({

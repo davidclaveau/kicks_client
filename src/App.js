@@ -59,7 +59,6 @@ const App = () => {
   };
 
   const handleLogin = (data) => {
-    console.log("data", data)
     setUser({
       isLoggedIn: true,
       user: data.user
