@@ -37,7 +37,8 @@ const useStyles = makeStyles({
 const App = () => {
   const [user, setUser] = useState({
     isLoggedIn: false,
-    user: {}
+    user: {},
+    role: undefined
   });
 
   useEffect(() => {
@@ -61,13 +62,15 @@ const App = () => {
   const handleLogin = (data) => {
     setUser({
       isLoggedIn: true,
-      user: data.user
+      user: data.user,
+      role: data.role
     })
   }
   const handleLogout = () => {
     setUser({
     isLoggedIn: false,
-    user: {}
+    user: {},
+    role: undefined
     })
   }
 

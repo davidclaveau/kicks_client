@@ -70,7 +70,8 @@ const Login = (props) => {
         if (response.data.logged_in) {
           setUser({
             isLoggedIn: true,
-            user: response.data.user
+            user: response.data.user,
+            role: response.data.role
           })
           history.push('/')
         } else {
