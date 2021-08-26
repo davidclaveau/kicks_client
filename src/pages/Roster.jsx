@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../contexts/userContext'
 import axios from 'axios';
 import Player from './Player'
+import RosterAddPlayer from '../forms/RosterAddPlayer'
 import './Roster.css'
 
 // Provide player information for each team
@@ -37,16 +38,15 @@ const Roster = (props) => {
     )
   })
 
-  let test = false
-  if (user.role === "Admin" || user.role === "Manager") {
-    test = true;
+  // Need to specify that only managers of this team can add/remove players
+  let adminAllowed = false
+  if (user.role === "Admin") {
+    adminAllowed = true;
   }
 
   return (
     <div>
-      This is the Roster component.
-
-      {test && "Hello"}
+      {adminAllowed && <RosterAddPlayer />}
 
       <h5>
         {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}
