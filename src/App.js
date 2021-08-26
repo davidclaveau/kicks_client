@@ -26,7 +26,8 @@ import './App.css';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: '50px' // whitespace between content and nav, header
   },
   content: {
     marginTop: '64px',

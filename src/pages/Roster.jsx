@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../contexts/userContext'
 import axios from 'axios';
 import Player from './Player'
 import './Roster.css'
@@ -6,7 +7,9 @@ import './Roster.css'
 // Provide player information for each team
 // Roster ID is passed as location.state.id from the Team component
 const Roster = (props) => {
-  const [roster, setRoster] = useState([])
+  const [roster, setRoster] = useState([]);
+  const { user } = useContext(UserContext);
+
   const apiURL = 'http://localhost:3001/api/v1'
   
   useEffect(() => {
@@ -34,10 +37,16 @@ const Roster = (props) => {
     )
   })
 
+  let test = false
+  if (user.role === "Admin" || user.role === "Manager") {
+    test = true;
+  }
 
   return (
     <div>
       This is the Roster component.
+
+      {test && "Hello"}
 
       <h5>
         {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}
