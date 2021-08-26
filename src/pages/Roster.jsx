@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../contexts/userContext'
 import axios from 'axios';
 import Player from './Player'
-import RosterAddPlayer from '../forms/RosterAddPlayer'
+import RosterAddPlayer from '../forms/team_forms/RosterAddPlayer'
 import './Roster.css'
 
 // Provide player information for each team
