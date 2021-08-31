@@ -1,4 +1,4 @@
-import { useState, useEffect, createRef } from 'react';
+import { useState, useEffect, createRef, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios';
 import useDebounce from "../../hooks/useDebounce";
+import Player from '../../pages/Player';
 
 const useStyles = makeStyles((theme) => ({
   adminBar: {
@@ -25,8 +26,13 @@ const Form = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const searchTerm = useDebounce(value, 400);
+  const [results, setResults] = useState([]);
+  const searchTerm = useDebounce(value, 1000);
   const addPlayerRef = createRef(null);
+
+  // const onSearch = useCallback(, [searchTerm]);
+
+  console.log("searchTerm", searchTerm)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,12 +43,26 @@ const Form = () => {
   };
 
   useEffect(() => {
-    const url = `http://localhost:3001/api/v1/users/${searchTerm}`;
+    const url = `http://localhost:3001/api/v1/users`;
     axios
       .get(url)
       .then(response => {
-      console.log("response",response)})
+        setResults([...response.data.users])})
   }, [searchTerm])
+
+  console.log("results", results)
+  
+  const playerMap = results.map(player => {
+    return (
+      <Player
+        key={player.id}
+        firstName={player.first_name}
+        lastName={player.last_name}
+        publicSector={player.public_sector}
+        winterTeam={player.winter_team}
+      />
+    )
+  })
 
   return (
     <div className={classes.adminBar}>
@@ -72,9 +92,18 @@ const Form = () => {
             fullWidth
           />
         </DialogContent>
-        <DialogContentText>
-          {}
-        </DialogContentText>
+          <div>
+            <table className="tableClass">
+              <tbody>
+                <tr>
+                  <th>Player</th>
+                  <th>Winter Team</th>
+                  <th>Public Sector</th>
+                </tr>
+                {results.length > 0 ? playerMap : ""}
+              </tbody>
+            </table>
+          </div>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
