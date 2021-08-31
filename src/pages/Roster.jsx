@@ -14,17 +14,17 @@ const Roster = (props) => {
   const apiURL = 'http://localhost:3001/api/v1'
   
   useEffect(() => {
-    getRoster()
-  }, [])
-  
-  async function getRoster() {
-    try {
-      const response = await axios.get(`${apiURL}/rosters/${props.location.state.id}`);
-      setRoster(response.data);
-    } catch (error) {
-      console.error(error);
+    async function getRoster() {
+      try {
+        const response = await axios.get(`${apiURL}/rosters/${props.location.state.id}`);
+        setRoster(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
+    getRoster()
+  }, [props.location.state.id])
+  
 
   const rosterMap = roster.map(player => {
     return (
@@ -46,7 +46,7 @@ const Roster = (props) => {
 
   return (
     <div>
-      {adminAllowed && <RosterAddPlayer />}
+      {adminAllowed && <RosterAddPlayer roster={roster}/>}
 
       <h5>
         {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}

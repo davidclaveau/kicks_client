@@ -1,7 +1,7 @@
 const Player = (props) => {
 
   return (
-    <tr>
+    <tr onClick={props.onSelect}>
       <td>{props.firstName} {props.lastName}</td>
       <td>{props.winterTeam}</td>
       <td>{props.publicSector}</td>

@@ -1,4 +1,5 @@
-import { useState, useEffect, createRef, useCallback } from 'react';
+import { useState, useEffect, createRef } from 'react';
+import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -22,13 +23,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Form = () => {
+const Form = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([]);
+  const [player, setPlayer] = useState({player_id: 0});
   const searchTerm = useDebounce(value, 500);
   const addPlayerRef = createRef(null);
+  const { id } = useParams()
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,6 +40,27 @@ const Form = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const addPlayer = () => {
+    handleClose();
+
+
+    console.log("You have attempted to add a player");
+    console.log("roster.id", id)
+    console.log("player.id", player.player_id)
+
+    const url = `http://localhost:3001/api/v1/rosters/`;
+    axios
+      .post(url,
+        { 
+          user_id: player.player_id,
+          team_id: id
+        })
+      .then(response => {
+        console.log("response", response.data)
+      })
+  }
 
   useEffect(() => {
     const url = `http://localhost:3001/user_search?q=${searchTerm}`;
@@ -47,7 +71,7 @@ const Form = () => {
         setResults([...response.data])
       })
   }, [searchTerm])
-  
+
   const playerMap = results.map(player => {
     return (
       <Player
@@ -56,6 +80,7 @@ const Form = () => {
         lastName={player.last_name}
         publicSector={player.public_sector}
         winterTeam={player.winter_team}
+        onSelect={() => setPlayer({player_id: player.id})}
       />
     )
   })
@@ -104,7 +129,7 @@ const Form = () => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={addPlayer} color="primary">
             Add
           </Button>
         </DialogActions>
