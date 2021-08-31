@@ -27,12 +27,8 @@ const Form = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([]);
-  const searchTerm = useDebounce(value, 1000);
+  const searchTerm = useDebounce(value, 500);
   const addPlayerRef = createRef(null);
-
-  // const onSearch = useCallback(, [searchTerm]);
-
-  console.log("searchTerm", searchTerm)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,14 +39,14 @@ const Form = () => {
   };
 
   useEffect(() => {
-    const url = `http://localhost:3001/api/v1/users`;
+    const url = `http://localhost:3001/user_search?q=${searchTerm}`;
     axios
       .get(url)
       .then(response => {
-        setResults([...response.data.users])})
+        console.log("response", response.data)
+        setResults([...response.data])
+      })
   }, [searchTerm])
-
-  console.log("results", results)
   
   const playerMap = results.map(player => {
     return (
