@@ -41,27 +41,6 @@ const Form = (props) => {
     setOpen(false);
   };
 
-
-  const addPlayer = () => {
-    handleClose();
-
-
-    console.log("You have attempted to add a player");
-    console.log("roster.id", id)
-    console.log("player.id", player.player_id)
-
-    const url = `http://localhost:3001/api/v1/rosters/`;
-    axios
-      .post(url,
-        { 
-          user_id: player.player_id,
-          team_id: id
-        })
-      .then(response => {
-        console.log("response", response.data)
-      })
-  }
-
   useEffect(() => {
     const url = `http://localhost:3001/user_search?q=${searchTerm}`;
     axios
@@ -76,6 +55,7 @@ const Form = (props) => {
     return (
       <Player
         key={player.id}
+        playerId={player.id}
         firstName={player.first_name}
         lastName={player.last_name}
         publicSector={player.public_sector}
@@ -96,7 +76,12 @@ const Form = (props) => {
       >
         Add Player
       </Button>
-      <Dialog ref={addPlayerRef} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog 
+        ref={addPlayerRef}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Add Player</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -129,7 +114,10 @@ const Form = (props) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={addPlayer} color="primary">
+          <Button onClick={() => {
+            props.addPlayer(id, player.player_id)
+            handleClose()
+          }} color="primary">
             Add
           </Button>
         </DialogActions>
