@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
-import { UserContext } from '../contexts/userContext'
+import { UserContext } from '../contexts/userContext';
 import axios from 'axios';
-import Player from './Player'
-import RosterAddPlayer from '../forms/team_forms/RosterAddPlayer'
+import RosterPlayer from './RosterPlayer';
+import RosterAddPlayer from '../forms/team_forms/RosterAddPlayer';
+import Errors from './Errors';
 import './Roster.css'
 
 // Provide player information for each team
@@ -30,6 +31,8 @@ const Roster = (props) => {
     }
   }]);
   const { user } = useContext(UserContext);
+  const [error, setError] = useState("")
+
   const apiURL = 'http://localhost:3001/api/v1';  
   const getRoster = useCallback(() => {
     axios
@@ -55,7 +58,15 @@ const Roster = (props) => {
         }
       )
       .then(response => {
-        console.log("added player", response)
+        console.log("add player response", response)
+        if (response.data.errors) {
+          setError({
+            ...error,
+            messages: [...response.data.errors], 
+            code: response.data.status
+          })
+          console.log("asdf", error)
+        }
         getRoster();
       })
   }
@@ -73,7 +84,7 @@ const Roster = (props) => {
   const rosterMap = roster.map(roster => {
     console.log("howdy", roster.team.name)
     return (
-      <Player
+      <RosterPlayer
         key={roster.id}
         firstName={roster.user.first_name}
         lastName={roster.user.last_name}
@@ -94,7 +105,9 @@ const Roster = (props) => {
   return (
     <div>
       {adminAllowed && <RosterAddPlayer roster={roster} addPlayer={addPlayer}/>}
-
+      {error && 
+        <Errors error={error}/>
+      }
       <h5>
         {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}
         <table className="tableClass">

@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios';
 import useDebounce from "../../hooks/useDebounce";
-import Player from '../../pages/Player';
+import AddPlayer from '../../pages/AddPlayer';
 
 const useStyles = makeStyles((theme) => ({
   adminBar: {
@@ -53,7 +53,7 @@ const Form = (props) => {
 
   const playerMap = results.map(player => {
     return (
-      <Player
+      <AddPlayer
         key={player.id}
         playerId={player.id}
         firstName={player.first_name}

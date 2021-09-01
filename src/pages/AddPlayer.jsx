@@ -1,6 +1,4 @@
-const Player = (props) => {
-
-  console.log("props", props)
+const RosterPlayer = (props) => {
 
   return (
     <tr onClick={props.onSelect}>
@@ -14,4 +12,4 @@ const Player = (props) => {
   )
 }
 
-export default Player;
+export default RosterPlayer;
