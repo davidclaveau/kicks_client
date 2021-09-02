@@ -4,9 +4,9 @@ const RosterPlayer = (props) => {
 
   
   return (
-    <tr className={props.active ? "roster-table-row highlight" : "roster-table-row"} onClick={() => {
+    <tr className={props.active ? "roster-table-row--selected" : "roster-table-row"} onClick={() => {
       props.onChosen()
-      return (props.onSelect)
+      return (props.onSelect())
       }}
     >
       <td>{props.firstName} {props.lastName}</td>

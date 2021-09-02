@@ -51,6 +51,8 @@ const Form = (props) => {
       })
   }, [searchTerm])
 
+  console.log("player", player)
+
   const playerMap = results.map(player => {
     return (
       <AddPlayer
@@ -118,6 +120,7 @@ const Form = (props) => {
           </Button>
           <Button onClick={() => {
             props.addPlayer(id, player.player_id)
+            setChosen("")
             handleClose()
           }} color="primary">
             Add
