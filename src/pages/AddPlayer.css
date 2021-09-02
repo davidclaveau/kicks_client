@@ -1,0 +1,12 @@
+.roster-table-row:hover {
+  background-color: rgb(193, 232, 255);
+  cursor: pointer;
+}
+
+.roster-table-row td {
+  padding: .5em;
+}
+
+.highlight {
+  outline: auto;
+}

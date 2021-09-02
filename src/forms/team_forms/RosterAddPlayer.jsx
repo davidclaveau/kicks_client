@@ -31,6 +31,7 @@ const Form = (props) => {
   const [player, setPlayer] = useState({player_id: 0});
   const searchTerm = useDebounce(value, 500);
   const addPlayerRef = createRef(null);
+  const [chosen, setChosen] = useState()
   const { id } = useParams()
 
   const handleClickOpen = () => {
@@ -46,8 +47,7 @@ const Form = (props) => {
     axios
       .get(url)
       .then(response => {
-        console.log("response", response.data)
-        setResults([...response.data])
+        setResults([...response.data].slice(0, 7))
       })
   }, [searchTerm])
 
@@ -60,6 +60,8 @@ const Form = (props) => {
         lastName={player.last_name}
         publicSector={player.public_sector}
         winterTeam={player.winter_team}
+        active={player.first_name === chosen}
+        onChosen={() => setChosen(player.first_name)}
         onSelect={() => setPlayer({player_id: player.id})}
       />
     )

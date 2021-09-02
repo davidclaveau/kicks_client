@@ -58,14 +58,12 @@ const Roster = (props) => {
         }
       )
       .then(response => {
-        console.log("add player response", response)
         if (response.data.errors) {
           setError({
             ...error,
             messages: [...response.data.errors], 
             code: response.data.status
           })
-          console.log("asdf", error)
         }
         getRoster();
       })
@@ -76,13 +74,11 @@ const Roster = (props) => {
     axios
       .delete(url)
       .then(response => {
-        console.log("response", response.data)
         getRoster();
       })
   }  
   
   const rosterMap = roster.map(roster => {
-    console.log("howdy", roster.team.name)
     return (
       <RosterPlayer
         key={roster.id}
@@ -116,7 +112,7 @@ const Roster = (props) => {
               <th>Player</th>
               <th>Winter Team</th>
               <th>Public Sector</th>
-              <th>Remove?</th>
+              <th></th>
             </tr>
             {rosterMap.length !== 0 && rosterMap}
           </tbody>
