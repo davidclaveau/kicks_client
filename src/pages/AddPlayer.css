@@ -1,0 +1,19 @@
+.roster-table-row:hover {
+  background-color: #c7ffb4;
+  cursor: pointer;
+}
+
+.roster-table-row td {
+  padding: .5em;
+}
+
+.roster-table-row--selected {
+  padding: .5em;
+  background-color: #c7ffb4;
+  outline: auto;
+  outline-color: darkgreen;
+}
+
+.roster-table-row--selected td {
+  padding: .5em;
+}

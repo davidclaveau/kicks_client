@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
 import axios from 'axios';
-import { UserContext } from '../contexts/userContext'
+import { UserContext } from '../contexts/userContext';
+import Errors from '../pages/Errors';
 
 import Avatar from '@material-ui/core/Avatar';
-import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -97,16 +97,7 @@ const Login = (props) => {
           Log In
         </Typography>
         {error && 
-          <ul className={classes.alertList}>
-            {error.messages.map(message => {
-              return (
-                <li>
-                  <Alert className={classes.alert} variant="filled" severity="error">{message}
-                  </Alert>
-                </li>
-              )
-            })}
-          </ul>
+          <Errors error={error}/>
         }
         <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField

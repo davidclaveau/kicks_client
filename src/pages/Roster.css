@@ -1,6 +1,7 @@
 .tableClass {
   table-layout : fixed;
   width: 100%;
+  border-spacing: 0;
 }
 
 td {

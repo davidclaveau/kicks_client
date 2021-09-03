@@ -1,4 +1,5 @@
-import { useState, useEffect, createRef, useCallback } from 'react';
+import { useState, useEffect, createRef } from 'react';
+import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,7 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios';
 import useDebounce from "../../hooks/useDebounce";
-import Player from '../../pages/Player';
+import AddPlayer from '../../pages/AddPlayer';
 
 const useStyles = makeStyles((theme) => ({
   adminBar: {
@@ -22,17 +23,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Form = () => {
+const Form = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [results, setResults] = useState([]);
-  const searchTerm = useDebounce(value, 1000);
+  const [player, setPlayer] = useState({player_id: 0});
+  const searchTerm = useDebounce(value, 500);
   const addPlayerRef = createRef(null);
-
-  // const onSearch = useCallback(, [searchTerm]);
-
-  console.log("searchTerm", searchTerm)
+  const [chosen, setChosen] = useState()
+  const { id } = useParams()
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,23 +43,28 @@ const Form = () => {
   };
 
   useEffect(() => {
-    const url = `http://localhost:3001/api/v1/users`;
+    const url = `http://localhost:3001/user_search?q=${searchTerm}`;
     axios
       .get(url)
       .then(response => {
-        setResults([...response.data.users])})
+        setResults([...response.data].slice(0, 7))
+      })
   }, [searchTerm])
 
-  console.log("results", results)
-  
+  console.log("player", player)
+
   const playerMap = results.map(player => {
     return (
-      <Player
+      <AddPlayer
         key={player.id}
+        playerId={player.id}
         firstName={player.first_name}
         lastName={player.last_name}
         publicSector={player.public_sector}
         winterTeam={player.winter_team}
+        active={player.first_name === chosen}
+        onChosen={() => setChosen(player.first_name)}
+        onSelect={() => setPlayer({player_id: player.id})}
       />
     )
   })
@@ -75,7 +80,12 @@ const Form = () => {
       >
         Add Player
       </Button>
-      <Dialog ref={addPlayerRef} open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog 
+        ref={addPlayerRef}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Add Player</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -108,7 +118,11 @@ const Form = () => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={() => {
+            props.addPlayer(id, player.player_id)
+            setChosen("")
+            handleClose()
+          }} color="primary">
             Add
           </Button>
         </DialogActions>

@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
 import axios from 'axios';
-import { UserContext } from '../contexts/userContext'
+import { UserContext } from '../contexts/userContext';
+import Errors from '../pages/Errors';
 
 import Avatar from '@material-ui/core/Avatar';
-import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -86,6 +86,7 @@ const Signup = (props) => {
           } else {
             // Spread the array of errors to share to user
             setError({
+              ...error,
               messages: [...response.data.errors], 
               code: response.data.status
             })
@@ -96,6 +97,7 @@ const Signup = (props) => {
         });
     } else {
       setError({
+        ...error,
         messages: ["Passwords do not match - please try again"], 
         code: "403"
       })
@@ -113,16 +115,7 @@ const Signup = (props) => {
           Sign up
         </Typography>
         {error && 
-          <ul className={classes.alertList}>
-            {error.messages.map(message => {
-              return (
-                <li>
-                  <Alert className={classes.alert} variant="filled" severity="error">{message}
-                  </Alert>
-                </li>
-              )
-            })}
-          </ul>
+          <Errors error={error}/>
         }
         <form className={classes.form} onSubmit={handleSignup}>
           <Grid container spacing={2}>
