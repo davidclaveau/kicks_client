@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -27,23 +27,23 @@ const useStyles = makeStyles({
 // Render all teams in the league using the Team component
 // Provide the team name, manager, and manager name
 const Teams = (props) => {
-  const [teams, setTeams] = useState([]);
-  const apiURL = 'http://localhost:3001/api/v1';
   const classes = useStyles();
+  const [teams, setTeams] = useState([]);
   const { history } = props
   const { user } = useContext(UserContext);
   const [error, setError] = useState("")
-
-
-  useEffect(() => {
-    getTeams()
-  }, []);
   
-  const getTeams = () => {
+  const apiURL = 'http://localhost:3001/api/v1';
+  const getTeams = useCallback(() => {
     axios
       .get(`${apiURL}/teams`)
       .then(response => setTeams(response.data))
-  };
+  }, [])
+
+  useEffect(() => {
+    getTeams()
+  }, [getTeams]);
+  
 
   // Each team will have its kit, name, and manager displayed
   // Teams are only visible if they're currently active
