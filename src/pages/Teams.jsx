@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import Team from './Team';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,8 +12,11 @@ import {
   Paper,
   IconButton
 } from '@material-ui/core'
+import { UserContext } from '../contexts/userContext';
 
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import Remove from '@material-ui/icons/RemoveCircle';
+import Add from '@material-ui/icons/AddCircle';
 
 const useStyles = makeStyles({
   table: {
@@ -28,6 +31,7 @@ const Teams = (props) => {
   const apiURL = 'http://localhost:3001/api/v1';
   const classes = useStyles();
   const { history } = props
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getTeams()
@@ -42,16 +46,24 @@ const Teams = (props) => {
   // Each team will have its kit, name, and manager displayed
   // Teams are only visible if they're currently active
   // Team id is provided for users to visit roster page
-  const  createData = (team, manager_name, jersey, roster, id, active) => {
-    return { team, manager_name, jersey, roster, id, active };
+  const  createData = (team, manager_name, jersey, roster, id, active, remove, add) => {
+    return { team, manager_name, jersey, roster, id, active, remove, add };
   }
   const rows = teams.map(team => {
     return (
-      createData(`${team.name}`,`${team.manager.manager_first_name} ${team.manager.manager_last_name}`,`${team.jersey_img}`, <PeopleAltIcon />, `${team.id}`, `${team.active}` )
+      createData(`${team.name}`,`${team.manager.manager_first_name} ${team.manager.manager_last_name}`,`${team.jersey_img}`, <PeopleAltIcon />, `${team.id}`, `${team.active}`, <Remove />, <Add /> )
     )
   });
     
-  const getRoster = (id) => {history.push({ pathname: `/roster/${id}`, state: { id: id }})}
+  const getRoster = id => {history.push({ pathname: `/roster/${id}`, state: { id: id }})}
+
+  const setInactive = (id) => {
+    console.log("remove this team")
+  }
+
+  const setActive = (id) => {
+    console.log("add this team")
+  }
 
   return (
     <>
@@ -65,6 +77,9 @@ const Teams = (props) => {
               <TableCell align="left">Team Name</TableCell>
               <TableCell align="right">Manager</TableCell>
               <TableCell align="right">Roster</TableCell>
+              {user.role === "Admin" &&
+                <TableCell align="right">Options</TableCell>
+              }
             </TableRow>
           </TableHead>
           <TableBody>
@@ -80,11 +95,58 @@ const Teams = (props) => {
                     {row.roster}
                   </IconButton>
                 </TableCell>
+                <TableCell align="right">
+                  <IconButton onClick={() => setInactive(row.id)}>
+                    {row.remove}
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      {user.role === "Admin" && 
+        <>
+        <h2>Inactive Teams (Only Visible to Admin)</h2>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="caption table">
+            <caption>Inactive teams</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Kit</TableCell>
+                <TableCell align="left">Team Name</TableCell>
+                <TableCell align="right">Manager</TableCell>
+                <TableCell align="right">Roster</TableCell>
+                {user.role === "Admin" &&
+                <TableCell align="right">Options</TableCell>
+                }
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.filter(row => row.active === "false").map((row) => (
+                <TableRow key={row.team}>
+                  <TableCell component="th" scope="row">
+                    {row.jersey}
+                  </TableCell>
+                  <TableCell align="left">{row.team}</TableCell>
+                  <TableCell align="right">{row.manager_name}</TableCell>
+                  <TableCell align="right">
+                    <IconButton onClick={() => getRoster(row.id)} >
+                      {row.roster}
+                    </IconButton>
+                  </TableCell>
+                  <TableCell align="right">
+                  <IconButton onClick={() => setActive(row.id)}>
+                    {row.add}
+                  </IconButton>
+                </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        </>
+      }
     </>
   );
 }

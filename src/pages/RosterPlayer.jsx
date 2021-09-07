@@ -1,7 +1,7 @@
-import { IconButton } from '@material-ui/core';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { useContext } from 'react';
 import { UserContext } from '../contexts/userContext';
+import { IconButton } from '@material-ui/core';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const AddPlayer = (props) => {
   const { user } = useContext(UserContext);
