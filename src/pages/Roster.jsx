@@ -1,33 +1,54 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { UserContext } from '../contexts/userContext';
+import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import RosterPlayer from './RosterPlayer';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton
+} from '@material-ui/core'
+import Remove from '@material-ui/icons/RemoveCircle';
+
 import RosterAddPlayer from '../forms/team_forms/RosterAddPlayer';
 import Errors from './Errors';
 import './Roster.css'
 
+const useStyles = makeStyles({
+  table: {
+    tableLayout: 'fixed',
+    whiteSpace: 'nowrap',
+    minWidth: 650,
+  },
+});
+
 // Provide player information for each team
 // Roster ID is passed as location.state.id from the Team component
 const Roster = (props) => {
+  const classes = useStyles();
   const [roster, setRoster] = useState([{
     team: {
       id: 0,
       manager: {
         manager_id: 0,
-        manager_first_name: "",
-        manager_last_name: ""
+        manager_first_name: "Manager",
+        manager_last_name: "Manager"
       },
-      name: ""
+      name: "team"
     },
     user: {
       id: 0,
-      email: "",
-      first_name: "",
-      last_name: "",
+      email: "email@email.com",
+      first_name: "First",
+      last_name: "Last",
       password_digest: "",
-      phone_number: "",
-      public_sector: "",
-      winter_team: ""
+      phone_number: "555-555-5555",
+      public_sector: "Public Sector",
+      winter_team: "Winter Team"
     }
   }]);
   const { user } = useContext(UserContext);
@@ -48,6 +69,9 @@ const Roster = (props) => {
     getRoster()
   }, [getRoster])
 
+  // Selecting "Add Player" button will render the RosterAddPlayer component
+  // The user can select the player to add, the team_id and user_is returned
+  // This selected player is added to the team, Roster component rerenders
   const addPlayer = (team_id, user_id) => {
     const url = `${apiURL}/rosters`;
     axios
@@ -69,28 +93,25 @@ const Roster = (props) => {
       })
   }
 
+  // Player is removed using their roster id
+  // Roster component is rerendered
   const removePlayer = (roster_id) => {
-    const url = `${apiURL}/rosters/${roster_id.id}`;
+    const url = `${apiURL}/rosters/${roster_id}`;
     axios
       .delete(url)
       .then(response => {
         getRoster();
       })
-  }  
-  
-  const rosterMap = roster.map(roster => {
+  }
+
+  const  createData = (rosterId, userId, teamId, player, winterTeam, publicSector, remove) => {
+    return { rosterId, userId, teamId, player, winterTeam, publicSector, remove };
+  }
+  const rows = roster.map(roster => {
     return (
-      <RosterPlayer
-        key={roster.id}
-        firstName={roster.user.first_name}
-        lastName={roster.user.last_name}
-        publicSector={roster.user.public_sector}
-        winterTeam={roster.user.winter_team}
-        currentTeam={roster.team.name}
-        onRemove={() => removePlayer(roster)}
-      />
+      createData(roster.id, roster.user.id, roster.team.id, `${roster.user.first_name} ${roster.user.last_name}`, roster.user.winter_team, roster.user.public_sector, <Remove />)
     )
-  })
+  });
 
   // Need to specify that only managers of this team can add/remove players
   let adminAllowed = false
@@ -99,27 +120,47 @@ const Roster = (props) => {
   }
 
   return (
-    <div>
+    <div className="mobile-table">
       {adminAllowed && <RosterAddPlayer roster={roster} addPlayer={addPlayer}/>}
-      {error && 
-        <Errors error={error}/>
-      }
-      <h5>
-        {roster.length !== 0 ? roster[0].team.name : "No Team Selected"}
-        <table className="tableClass">
-          <tbody>
-            <tr>
-              <th>Player</th>
-              <th>Winter Team</th>
-              <th>Public Sector</th>
-              <th></th>
-            </tr>
-            {rosterMap.length !== 0 && rosterMap}
-          </tbody>
-        </table>
-      </h5>
-    </div>
-  )
+       {error && 
+         <Errors error={error}/>
+       }
+      <h2>{roster[0].team.name}</h2>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="caption table">
+            <caption>Active roster for the {roster[0].team.name}</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Player Name</TableCell>
+                <TableCell align="center">Winter Team</TableCell>
+                <TableCell align="right">Public Sector</TableCell>
+                {user.role === "Admin" &&
+                  <TableCell align="center">Remove</TableCell>
+                }
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.rosterId}>
+                  <TableCell component="th" scope="row">
+                    {row.player}
+                  </TableCell>
+                  <TableCell align="center">{row.winterTeam}</TableCell>
+                  <TableCell align="right">{row.publicSector}</TableCell>
+                  {user.role === "Admin" &&
+                    <TableCell align="center">
+                      <IconButton onClick={() => removePlayer(row.rosterId)}>
+                        {row.remove}
+                      </IconButton>
+                    </TableCell>
+                  }
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+  );
 };
 
 export default Roster;
