@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 import { UserContext } from '../contexts/userContext';
 import Errors from './Errors';
+import './Teams.css';
 
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import Remove from '@material-ui/icons/RemoveCircle';
@@ -106,7 +107,7 @@ const Teams = (props) => {
   }
 
   return (
-    <>
+    <div className="mobile-table">
       {error && 
         <Errors error={error}/>
       }
@@ -195,7 +196,7 @@ const Teams = (props) => {
         </TableContainer>
         </>
       }
-    </>
+    </div>
   );
 }
 

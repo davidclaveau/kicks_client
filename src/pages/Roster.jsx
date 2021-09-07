@@ -20,6 +20,8 @@ import './Roster.css'
 
 const useStyles = makeStyles({
   table: {
+    tableLayout: 'fixed',
+    whiteSpace: 'nowrap',
     minWidth: 650,
   },
 });
@@ -118,7 +120,7 @@ const Roster = (props) => {
   }
 
   return (
-      <>
+    <div className="mobile-table">
       {adminAllowed && <RosterAddPlayer roster={roster} addPlayer={addPlayer}/>}
        {error && 
          <Errors error={error}/>
@@ -130,7 +132,7 @@ const Roster = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Player Name</TableCell>
-                <TableCell align="left">Winter Team</TableCell>
+                <TableCell align="center">Winter Team</TableCell>
                 <TableCell align="right">Public Sector</TableCell>
                 {user.role === "Admin" &&
                   <TableCell align="center">Remove</TableCell>
@@ -143,7 +145,7 @@ const Roster = (props) => {
                   <TableCell component="th" scope="row">
                     {row.player}
                   </TableCell>
-                  <TableCell align="right">{row.winterTeam}</TableCell>
+                  <TableCell align="center">{row.winterTeam}</TableCell>
                   <TableCell align="right">{row.publicSector}</TableCell>
                   {user.role === "Admin" &&
                     <TableCell align="center">
@@ -157,7 +159,7 @@ const Roster = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </>
+      </div>
   );
 };
 
