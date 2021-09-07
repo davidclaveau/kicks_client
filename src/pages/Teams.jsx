@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import Team from './Team';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Table,
@@ -13,6 +12,7 @@ import {
   IconButton
 } from '@material-ui/core'
 import { UserContext } from '../contexts/userContext';
+import Errors from './Errors';
 
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import Remove from '@material-ui/icons/RemoveCircle';
@@ -32,6 +32,8 @@ const Teams = (props) => {
   const classes = useStyles();
   const { history } = props
   const { user } = useContext(UserContext);
+  const [error, setError] = useState("")
+
 
   useEffect(() => {
     getTeams()
@@ -46,6 +48,7 @@ const Teams = (props) => {
   // Each team will have its kit, name, and manager displayed
   // Teams are only visible if they're currently active
   // Team id is provided for users to visit roster page
+  // Also have the add/remove buttons for admin to add or remove teams
   const  createData = (team, manager_name, jersey, roster, id, active, remove, add) => {
     return { team, manager_name, jersey, roster, id, active, remove, add };
   }
@@ -55,18 +58,58 @@ const Teams = (props) => {
     )
   });
     
+  // Get the team roster when selecting the roster button
   const getRoster = id => {history.push({ pathname: `/roster/${id}`, state: { id: id }})}
 
+  // Remove the team from the league
+  // Set the team's "active" status to false
   const setInactive = (id) => {
-    console.log("remove this team")
-  }
-
+    const url = `${apiURL}/teams/${id}`;
+    axios
+    .patch(url,
+      { 
+        active: false
+      }
+      )
+      .then(response => {
+        if (response.data.errors) {
+          setError({
+            ...error,
+            messages: [...response.data.errors], 
+            code: response.data.status
+          })
+        }
+        getTeams();
+      })
+    }
+    
+  // Add the team to the league
+  // Set the team's "active" status to true
   const setActive = (id) => {
-    console.log("add this team")
+    const url = `${apiURL}/teams/${id}`;
+    axios
+      .patch(url,
+        { 
+          active: true
+        }
+      )
+      .then(response => {
+        if (response.data.errors) {
+          setError({
+            ...error,
+            messages: [...response.data.errors], 
+            code: response.data.status
+          })
+        }
+        getTeams();
+      })
   }
 
   return (
     <>
+      {error && 
+        <Errors error={error}/>
+      }
       <h2>2021 League</h2>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="caption table">
@@ -78,7 +121,7 @@ const Teams = (props) => {
               <TableCell align="right">Manager</TableCell>
               <TableCell align="right">Roster</TableCell>
               {user.role === "Admin" &&
-                <TableCell align="right">Options</TableCell>
+                <TableCell align="center">Remove</TableCell>
               }
             </TableRow>
           </TableHead>
@@ -95,16 +138,19 @@ const Teams = (props) => {
                     {row.roster}
                   </IconButton>
                 </TableCell>
-                <TableCell align="right">
-                  <IconButton onClick={() => setInactive(row.id)}>
-                    {row.remove}
-                  </IconButton>
-                </TableCell>
+                {user.role === "Admin" &&
+                  <TableCell align="center">
+                    <IconButton onClick={() => setInactive(row.id)}>
+                      {row.remove}
+                    </IconButton>
+                  </TableCell>
+                }
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <br></br>
       {user.role === "Admin" && 
         <>
         <h2>Inactive Teams (Only Visible to Admin)</h2>
@@ -118,7 +164,7 @@ const Teams = (props) => {
                 <TableCell align="right">Manager</TableCell>
                 <TableCell align="right">Roster</TableCell>
                 {user.role === "Admin" &&
-                <TableCell align="right">Options</TableCell>
+                  <TableCell align="center">Add</TableCell>
                 }
               </TableRow>
             </TableHead>
@@ -135,11 +181,13 @@ const Teams = (props) => {
                       {row.roster}
                     </IconButton>
                   </TableCell>
-                  <TableCell align="right">
-                  <IconButton onClick={() => setActive(row.id)}>
-                    {row.add}
-                  </IconButton>
-                </TableCell>
+                  {user.role === "Admin" &&
+                    <TableCell align="center">
+                      <IconButton onClick={() => setActive(row.id)}>
+                        {row.add}
+                      </IconButton>
+                    </TableCell>
+                  }
                 </TableRow>
               ))}
             </TableBody>
