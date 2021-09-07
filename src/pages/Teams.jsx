@@ -39,42 +39,19 @@ const Teams = (props) => {
       .then(response => setTeams(response.data))
   };
 
-  console.log("teams", teams)
-
-  const teamMap = teams.map(team => {
-    return (
-      <Team
-        key={team.id}
-        id={team.id}
-        teamName={team.name}
-        managerID={team.manager.manager_id}
-        managerFirstName={team.manager.manager_first_name}
-        managerLastName={team.manager.manager_last_name}
-      />
-    )
-  })
-
-
-  function createData(team, manager_name, jersey, roster, id) {
-    return { team, manager_name, jersey, roster, id };
+  // Each team will have its kit, name, and manager displayed
+  // Teams are only visible if they're currently active
+  // Team id is provided for users to visit roster page
+  const  createData = (team, manager_name, jersey, roster, id, active) => {
+    return { team, manager_name, jersey, roster, id, active };
   }
-
   const rows = teams.map(team => {
     return (
-      createData(`${team.name}`,`${team.manager.manager_first_name} ${team.manager.manager_last_name}`,`${team.jersey_img}`, <PeopleAltIcon />, `${team.id}` )
+      createData(`${team.name}`,`${team.manager.manager_first_name} ${team.manager.manager_last_name}`,`${team.jersey_img}`, <PeopleAltIcon />, `${team.id}`, `${team.active}` )
     )
-  })
+  });
     
-  const getRoster = (id) => {
-    return (
-      history.push(
-        {
-          pathname: `/roster/${id}`,
-          state: { id: id }
-        }
-      )
-    );
-  }
+  const getRoster = (id) => {history.push({ pathname: `/roster/${id}`, state: { id: id }})}
 
   return (
     <>
@@ -91,7 +68,7 @@ const Teams = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.filter(row => row.active === "true").map((row) => (
               <TableRow key={row.team}>
                 <TableCell component="th" scope="row">
                   {row.jersey}
