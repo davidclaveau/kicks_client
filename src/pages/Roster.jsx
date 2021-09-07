@@ -20,8 +20,6 @@ import './Roster.css'
 
 const useStyles = makeStyles({
   table: {
-    tableLayout: 'fixed',
-    whiteSpace: 'nowrap',
     minWidth: 650,
   },
 });

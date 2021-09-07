@@ -1,0 +1,29 @@
+@media screen and (max-width: 750px) {
+  .mobile-table {
+    margin-left: 10%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .mobile-table {
+    margin-left: 18%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .mobile-table {
+    margin-left: 25%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .mobile-table {
+    margin-left: 30%;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .mobile-table {
+    margin-left: 35%;
+  }
+}
