@@ -10,8 +10,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios';
-import useDebounce from "../../hooks/useDebounce";
-import AddPlayer from '../../pages/AddPlayer';
+import useDebounce from "../hooks/useDebounce";
+import AddPlayer from '../pages/AddPlayer';
 
 const useStyles = makeStyles((theme) => ({
   adminBar: {

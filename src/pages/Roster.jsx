@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import Remove from '@material-ui/icons/RemoveCircle';
 
-import RosterAddPlayer from '../forms/team_forms/RosterAddPlayer';
+import RosterAddPlayer from '../forms/RosterAddPlayer';
 import Errors from './Errors';
 import './Roster.css'
 

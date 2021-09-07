@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core'
 
 import Errors from './Errors';
+import AddGame from '../forms/AddGame';
 
 const useStyles = makeStyles({
   table: {
@@ -71,8 +72,15 @@ const Schedule = () => {
     return newDate;
   }
 
+  // Need to specify that only managers of this team can add/remove players
+  let adminAllowed = false
+  if (user.role === "Admin") {
+    adminAllowed = true;
+  }
+
   return (
     <div className="mobile-table">
+      {adminAllowed && <AddGame />}
        {error && 
          <Errors error={error}/>
        }
