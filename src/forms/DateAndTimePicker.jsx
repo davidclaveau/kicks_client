@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { GameContext } from '../contexts/gameContext';
+import { makeStyles } from '@material-ui/core/styles';
 
 import 'date-fns';
 import React from 'react';
@@ -11,9 +12,15 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
+const useStyles = makeStyles((theme) => ({
+  dateAndTime: {
+    margin: "16px 10px 8px 10px"
+  }
+}));
+
 
 const DateAndTimePicker = () => {
-  // const classes = useStyles();
+  const classes = useStyles();
   const { game, setGame } = useContext(GameContext);
   const [selectedDate, setSelectedDate] = useState(new Date());
   
@@ -51,31 +58,33 @@ const DateAndTimePicker = () => {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justifyContent="space-around">
-      <KeyboardDatePicker
-          margin="normal"
-          id="date-picker-dialog"
-          label="Date picker dialog"
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        <KeyboardTimePicker
-          margin="normal"
-          id="time-picker"
-          label="Time picker"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change time',
-          }}
-        />
-      </Grid>
-    </MuiPickersUtilsProvider>
+    <MuiPickersUtilsProvider utils={DateFnsUtils} >
+        <Grid container justifyContent="space-around">
+        <KeyboardDatePicker
+            margin="normal"
+            id="date-picker-dialog"
+            label="Game Date"
+            format="MM/dd/yyyy"
+            value={selectedDate}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+            className={classes.dateAndTime}
+          />
+          <KeyboardTimePicker
+            margin="normal"
+            id="time-picker"
+            label="Kickoff Time"
+            value={selectedDate}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change time',
+            }}
+            className={classes.dateAndTime}
+          />
+        </Grid>
+      </MuiPickersUtilsProvider>
   );
 }
 

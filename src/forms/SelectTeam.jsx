@@ -2,7 +2,7 @@ import {
   useState,
   useEffect,
   useCallback,
-  useContext
+  useContext,
 } from 'react';
 import { GameContext } from '../contexts/gameContext';
 import axios from 'axios';
@@ -63,14 +63,20 @@ const useStyles = makeStyles((theme) => ({
 
 const SelectTeam = (props) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [teams, setTeams] = useState([]);
-  const [away, setAway] = useState({name: "Away Team"});
-  const [home, setHome] = useState({name: "Home Team"});
+  const [anchorElAway, setAnchorElAway] = useState(null);
+  const [anchorElHome, setAnchorElHome] = useState(null);
   const { game, setGame } = useContext(GameContext);
+  const [teams, setTeams] = useState([]);
+  const [away, setAway] = useState({
+    id: 0,
+    name: "Away Team"
+  });
+  const [home, setHome] = useState({
+    id: 0,
+    name: "Home Team"
+  });
 
   const apiURL = 'http://localhost:3001/api/v1'
-  
   const getTeams = useCallback(() => {
     const url =  `${apiURL}/teams`
     axios
@@ -86,50 +92,104 @@ const SelectTeam = (props) => {
     getTeams();
   }, [getTeams])
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  useEffect(() => {
+    console.log("away", away)
+    console.log("home", home)
+    setGame({
+      ...game,
+      home_team_id: home.id,
+      away_team_id: away.id
+    });
+
+  }, [away, home, setGame])
+
+  const handleClickAway = (event) => {
+    setAnchorElAway(event.currentTarget);
+  };
+  
+  const handleClickHome = (event) => {
+    setAnchorElHome(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorElAway(null);
+    setAnchorElHome(null);
   };
 
-  const setName = (homeAway, team) => {
-    if (homeAway === "Home") {
-      // setGame
+  const setName = (homeOrAway, team) => {
+    if (homeOrAway === "Home") {
       setHome(team)
     }
+    if (homeOrAway === "Away") {
+      setAway(team)
+    }
 
-    setAway(team)
     handleClose()
   }
 
   return (
-    <div className={classes.buttons}>
+    <>
+      <div className={classes.buttons}>
+        <Button
+          aria-controls="customized-menu"
+          aria-haspopup="true"
+          variant="contained"
+          color="primary"
+          onClick={handleClickAway}
+        >
+          <span className={classes.icon}>
+            <CardTravelIcon />
+          </span>
+          { away.name }
+        </Button>
+        <StyledMenu
+          id="customized-menu"
+          anchorEl={anchorElAway}
+          keepMounted
+          open={Boolean(anchorElAway)}
+          onClose={handleClose}
+        >
+            {teams.filter(team => team.active === true
+                          && team.name !== away.name
+                          && team.name !== home.name)
+                  .map(team => {
+              return (
+                <StyledMenuItem onClick={() => setName("Away", team)}>
+                  <ListItemIcon>
+                    <CardTravelIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={team.name} />
+                </StyledMenuItem>
+              )
+            })}
+        </StyledMenu>
+      </div>
+
+      <div className={classes.buttons}>
       <Button
         aria-controls="customized-menu"
         aria-haspopup="true"
         variant="contained"
         color="primary"
-        onClick={handleClick}
+        onClick={handleClickHome}
       >
         <span className={classes.icon}>
-          {props.team === "Home" ? <HomeIcon /> : <CardTravelIcon />}
+          <HomeIcon />
         </span>
-        {props.team === "Home" ? home.name : away.name }
+        {home.name}
       </Button>
       <StyledMenu
         id="customized-menu"
-        anchorEl={anchorEl}
+        anchorEl={anchorElHome}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={Boolean(anchorElHome)}
         onClose={handleClose}
       >
-          {teams.filter(team => team.active === true).map(team => {
+          {teams.filter(team => team.active === true && team.name !== away.name && team.name !== home.name).map(team => {
             return (
-              <StyledMenuItem onClick={() => setName(props.team, team)}>
+              <StyledMenuItem onClick={() => setName("Home", team)}>
                 <ListItemIcon>
-                  {props.team === "Home" ? <HomeIcon fontSize="small" /> : <CardTravelIcon fontSize="small" />}
+                  <HomeIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary={team.name} />
               </StyledMenuItem>
@@ -137,6 +197,7 @@ const SelectTeam = (props) => {
           })}
       </StyledMenu>
     </div>
+  </>
   );
 }
 

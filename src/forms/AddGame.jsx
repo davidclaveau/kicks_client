@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   optionButtons: {
     display: "flex",
+    justifyContent: "center",
     marginTop: "10px"
   }
 }));
@@ -81,7 +82,6 @@ const AddGame = () => {
             <DatePicker />
             <div className={classes.optionButtons}>
               <SelectTeam team={"Away"}/>
-              <SelectTeam team={"Home"}/>
               <SelectField />
             </div>
           </DialogContent>
