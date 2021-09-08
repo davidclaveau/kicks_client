@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: theme.spacing(1)
+  },
+  dialogBox: {
+    minWidth: "1000px"
   }
 }));
 
@@ -85,6 +88,7 @@ const Form = (props) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
+        className={classes.dialogBox}
       >
         <DialogTitle id="form-dialog-title">Add Player</DialogTitle>
         <DialogContent>

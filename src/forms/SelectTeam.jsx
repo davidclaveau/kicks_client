@@ -1,4 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { 
+  useState,
+  useEffect,
+  useCallback,
+  useContext
+} from 'react';
+import { GameContext } from '../contexts/gameContext';
+import axios from 'axios';
+
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
@@ -7,7 +15,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import CardTravelIcon from '@material-ui/icons/CardTravel';
-import axios from 'axios'
 
 const StyledMenu = withStyles({
   paper: {
@@ -57,9 +64,10 @@ const useStyles = makeStyles((theme) => ({
 const SelectTeam = (props) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [teams, setTeams] = useState([])
-  const [away, setAway] = useState({name: "Away Team"})
-  const [home, setHome] = useState({name: "Home Team"})
+  const [teams, setTeams] = useState([]);
+  const [away, setAway] = useState({name: "Away Team"});
+  const [home, setHome] = useState({name: "Home Team"});
+  const { game, setGame } = useContext(GameContext);
 
   const apiURL = 'http://localhost:3001/api/v1'
   
@@ -88,6 +96,7 @@ const SelectTeam = (props) => {
 
   const setName = (homeAway, team) => {
     if (homeAway === "Home") {
+      // setGame
       setHome(team)
     }
 

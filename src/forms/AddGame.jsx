@@ -36,26 +36,16 @@ const useStyles = makeStyles((theme) => ({
 const AddGame = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  
-  // season: "2021",
-  // game_date: "2021-08-31",
-  // game_day: "Tuesday",
-  // game_time: "18:00",
-  // home_team_id: 1,
-  // away_team_id: 2,
-  // field: "Topaz",
-  // holiday: false
-
   const [game, setGame] = useState({
-    season: "2021",
-    game_date: "2021-08-31",
-    game_day: "Tuesday",
-    game_time: "18:00",
-    home_team_id: 1,
-    away_team_id: 2,
-    field: "Topaz",
+    season: "",
+    game_date: "",
+    game_day: "",
+    game_time: "",
+    home_team_id: 0,
+    away_team_id: 0,
+    field: "",
     holiday: false
-  })
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,6 +54,8 @@ const AddGame = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log("game", game)
 
   return (
     <GameContext.Provider value={{game, setGame}}>
