@@ -1,15 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
 import HomeIcon from '@material-ui/icons/Home';
 import CardTravelIcon from '@material-ui/icons/CardTravel';
+import axios from 'axios'
 
 const StyledMenu = withStyles({
   paper: {
@@ -59,6 +57,26 @@ const useStyles = makeStyles((theme) => ({
 const SelectTeam = (props) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [teams, setTeams] = useState([])
+  const [away, setAway] = useState({name: "Away Team"})
+  const [home, setHome] = useState({name: "Home Team"})
+
+  const apiURL = 'http://localhost:3001/api/v1'
+  
+  const getTeams = useCallback(() => {
+    const url =  `${apiURL}/teams`
+    axios
+      .get(url)
+      .then(response => {
+        console.log("teams res", response.data)
+        setTeams(response.data)
+
+      })
+  }, [])
+  
+  useEffect(() => {
+    getTeams();
+  }, [getTeams])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,6 +85,15 @@ const SelectTeam = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const setName = (homeAway, team) => {
+    if (homeAway === "Home") {
+      setHome(team)
+    }
+
+    setAway(team)
+    handleClose()
+  }
 
   return (
     <div className={classes.buttons}>
@@ -80,7 +107,7 @@ const SelectTeam = (props) => {
         <span className={classes.icon}>
           {props.team === "Home" ? <HomeIcon /> : <CardTravelIcon />}
         </span>
-        {props.team} Team
+        {props.team === "Home" ? home.name : away.name }
       </Button>
       <StyledMenu
         id="customized-menu"
@@ -89,12 +116,16 @@ const SelectTeam = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <StyledMenuItem>
-          <ListItemIcon>
-            {props.team === "Home" ? <HomeIcon fontSize="small" /> : <CardTravelIcon fontSize="small" />}
-          </ListItemIcon>
-          <ListItemText primary="Team 1" />
-        </StyledMenuItem>
+          {teams.filter(team => team.active === true).map(team => {
+            return (
+              <StyledMenuItem onClick={() => setName(props.team, team)}>
+                <ListItemIcon>
+                  {props.team === "Home" ? <HomeIcon fontSize="small" /> : <CardTravelIcon fontSize="small" />}
+                </ListItemIcon>
+                <ListItemText primary={team.name} />
+              </StyledMenuItem>
+            )
+          })}
       </StyledMenu>
     </div>
   );
