@@ -39,6 +39,8 @@ const DateAndTimePicker = () => {
     const gameDay = daysOfWeek[selectedDate.getDay()];
     // Date as yyyy-mm-dd
     const gameDate = selectedDate.toISOString().slice(0,10)
+    // Get year to indicate the season
+    const year = selectedDate.getFullYear();
     // Time as 24-hour, e.g. "18:00"
     const hour = selectedDate.getHours();
     const minutes = selectedDate.getMinutes();
@@ -50,6 +52,7 @@ const DateAndTimePicker = () => {
       game_date: gameDate,
       game_day: gameDay,
       game_time: gameTime,
+      season: year
     })
   }, [selectedDate]);
 

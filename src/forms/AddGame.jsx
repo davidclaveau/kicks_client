@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { GameContext } from '../contexts/gameContext';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -27,26 +26,22 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     flexDirection: "column"
   },
-  optionButtons: {
+  optionForms: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
     marginTop: "10px"
+  }, teamButtons: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start"
   }
 }));
 
-const AddGame = () => {
+const AddGame = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [game, setGame] = useState({
-    season: "",
-    game_date: "",
-    game_day: "",
-    game_time: "",
-    home_team_id: 0,
-    away_team_id: 0,
-    field: "",
-    holiday: false
-  });
+  const { submitGame } = props;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,46 +51,49 @@ const AddGame = () => {
     setOpen(false);
   };
 
-  console.log("game", game)
 
   return (
-    <GameContext.Provider value={{game, setGame}}>
-      <div className={classes.adminBar}>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          startIcon={<TodayIcon />}
-          onClick={handleClickOpen}
-        >
-          Add Game
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          maxWidth="xl"
-        >
-          <DialogTitle id="alert-dialog-title">{"Schedule a game"}</DialogTitle>
-          <DialogContent className={classes.options}>
-            <DatePicker />
-            <div className={classes.optionButtons}>
-              <SelectTeam team={"Away"}/>
-              <SelectField />
+    <div className={classes.adminBar}>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        startIcon={<TodayIcon />}
+        onClick={handleClickOpen}
+      >
+        Add Game
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth="xl"
+      >
+        <DialogTitle id="alert-dialog-title">{"Schedule a game"}</DialogTitle>
+        <DialogContent className={classes.options}>
+          <DatePicker />
+          <div className={classes.optionForms}>
+            <div className={classes.teamButtons}>
+              <SelectTeam />
             </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Submit
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    </GameContext.Provider>
+            <SelectField />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Cancel
+          </Button>
+          <Button onClick={() => {
+              handleClose();
+              submitGame();
+            }}
+            color="primary" autoFocus>
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 

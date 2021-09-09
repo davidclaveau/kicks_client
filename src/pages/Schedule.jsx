@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { UserContext } from '../contexts/userContext';
+import { GameContext } from '../contexts/gameContext';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import {
@@ -26,9 +27,19 @@ const useStyles = makeStyles({
 
 const Schedule = () => {
   const classes = useStyles();
+  const { user } = useContext(UserContext);
   const [schedule, setSchedule] = useState([]);
   const [error, setError] = useState("");
-  const { user } = useContext(UserContext);
+  const [game, setGame] = useState({
+    season: "",
+    game_date: "",
+    game_day: "",
+    game_time: "",
+    home_team_id: 0,
+    away_team_id: 0,
+    field: "",
+    holiday: false
+  });
 
   const apiURL = 'http://localhost:3001/api/v1'
   
@@ -46,6 +57,19 @@ const Schedule = () => {
         setSchedule(response.data);
       })
   }, [error])
+
+  const submitGame = () => {
+    const url = `${apiURL}/schedules`
+    axios
+      .post(url,
+        { 
+          ...game
+        })
+      .then(response => {
+        console.log('game', game);
+        getSchedule();
+      })   
+  }
 
   useEffect(() => {
     getSchedule()
@@ -79,12 +103,13 @@ const Schedule = () => {
   }
 
   return (
-    <div className="mobile-table">
-      {adminAllowed && <AddGame />}
-       {error && 
-         <Errors error={error}/>
-       }
-      <h2>Schedule 2021</h2>
+    <GameContext.Provider value={{game, setGame}}>
+      <div className="mobile-table">
+        {adminAllowed && <AddGame submitGame={() => submitGame()}/>}
+        {error && 
+          <Errors error={error}/>
+        }
+        <h2>Schedule 2021</h2>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="caption table">
             <caption>Current Schedule for 2021</caption>
@@ -123,6 +148,7 @@ const Schedule = () => {
           </Table>
         </TableContainer>
       </div>
+    </GameContext.Provider>
   )
 }; 
 
