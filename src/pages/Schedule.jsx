@@ -13,9 +13,10 @@ import {
   Paper,
   IconButton
 } from '@material-ui/core'
+import Remove from '@material-ui/icons/RemoveCircle';
 
-import Errors from './Errors';
 import AddGame from '../forms/AddGame';
+import Errors from './Errors';
 
 const useStyles = makeStyles({
   table: {
@@ -71,16 +72,25 @@ const Schedule = () => {
       })   
   }
 
+  const removeGame = (gameId) => {
+    const url = `${apiURL}/schedules/${gameId}`;
+    axios
+      .delete(url)
+      .then(response => {
+        getSchedule();
+      })
+  }
+
   useEffect(() => {
     getSchedule()
   }, [getSchedule])
 
-  const  createData = (gameId, gameDate, gameTime, awayTeam, homeTeam, field) => {
-    return { gameId, gameDate, gameTime, awayTeam, homeTeam, field };
+  const  createData = (gameId, gameDate, gameTime, awayTeam, homeTeam, field, remove) => {
+    return { gameId, gameDate, gameTime, awayTeam, homeTeam, field, remove};
   }
   const rows = schedule.map(game => {
     return (
-      createData(game.id, game.game_date, game.game_time, game.away_team.name, game.home_team.name, game.field)
+      createData(game.id, game.game_date, game.game_time, game.away_team.name, game.home_team.name, game.field, <Remove />)
     )
   });
 
@@ -88,9 +98,10 @@ const Schedule = () => {
   // Splice out the day of the week, add commas to the date
   // Output should be e.g. "Aug 30, 2021"
   const getDate = (date) => {
-    let newDate = new Date(date).toDateString().split('');
+    // Specify timezone to prevent date from decrementing as UTC
+    let newDate = new Date(`${date} 00:00:00 PDT`).toDateString().split('')
     newDate.splice(0,3);
-    newDate.splice(-5,0,',');
+    newDate.splice(-5,0, ',');
     newDate = newDate.join('');
 
     return newDate;
@@ -119,14 +130,16 @@ const Schedule = () => {
                 <TableCell align="center">Game Time</TableCell>
                 <TableCell align="center">Away Team</TableCell>
                 <TableCell align="center">Home Team</TableCell>
-                <TableCell align="right">Field</TableCell>
+                <TableCell align="center">Field</TableCell>
                 {user.role === "Admin" &&
                   <TableCell align="center">Options</TableCell>
                 }
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows
+                .sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate))
+                .map((row) => (
                 <TableRow key={row.gameId}>
                   <TableCell align="center" component="th" scope="row">
                     {row.gameDate ? getDate(row.gameDate) : ""}
@@ -134,11 +147,11 @@ const Schedule = () => {
                   <TableCell align="center">{row.gameTime}</TableCell>
                   <TableCell align="center">{row.awayTeam}</TableCell>
                   <TableCell align="center">{row.homeTeam}</TableCell>
-                  <TableCell align="right">{row.field}</TableCell>
+                  <TableCell align="center">{row.field}</TableCell>
                   {user.role === "Admin" &&
                     <TableCell align="center">
-                      <IconButton>
-                        !
+                      <IconButton onClick={() => removeGame(row.gameId)}>
+                        {row.remove}
                       </IconButton>
                     </TableCell>
                   }

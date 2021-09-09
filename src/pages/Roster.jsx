@@ -93,8 +93,8 @@ const Roster = (props) => {
 
   // Player is removed using their roster id
   // Roster component is rerendered
-  const removePlayer = (roster_id) => {
-    const url = `${apiURL}/rosters/${roster_id}`;
+  const removePlayer = (rosterId) => {
+    const url = `${apiURL}/rosters/${rosterId}`;
     axios
       .delete(url)
       .then(response => {
