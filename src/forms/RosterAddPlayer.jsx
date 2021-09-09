@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1)
   },
   dialogBox: {
-    minWidth: "1000px"
+    minWidth: "600px"
   }
 }));
 
@@ -88,9 +88,8 @@ const Form = (props) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.dialogBox}
       >
-        <DialogTitle id="form-dialog-title">Add Player</DialogTitle>
+        <DialogTitle id="form-dialog-title" className={classes.dialogBox}>Add Player</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please search for a player to add to the team.
@@ -106,8 +105,7 @@ const Form = (props) => {
             fullWidth
           />
         </DialogContent>
-          <div>
-            <table className="tableClass">
+            <table>
               <tbody>
                 <tr>
                   <th>Player</th>
@@ -117,7 +115,6 @@ const Form = (props) => {
                 {results.length > 0 ? playerMap : ""}
               </tbody>
             </table>
-          </div>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel

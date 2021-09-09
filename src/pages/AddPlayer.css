@@ -5,6 +5,8 @@
 
 .roster-table-row td {
   padding: .5em;
+  width: 33%;
+  text-align: center;
 }
 
 .roster-table-row--selected {
@@ -16,4 +18,6 @@
 
 .roster-table-row--selected td {
   padding: .5em;
+  width: 33%;
+  text-align: center;
 }
