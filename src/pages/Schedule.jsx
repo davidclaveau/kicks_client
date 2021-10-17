@@ -67,6 +67,13 @@ const Schedule = () => {
           ...game
         })
       .then(response => {
+        if (response.data.errors) {
+          setError({
+            ...error,
+            messages: [...response.data.errors], 
+            code: response.data.status
+          })
+        }
         console.log('game', game);
         getSchedule();
       })   
@@ -77,7 +84,22 @@ const Schedule = () => {
     axios
       .delete(url)
       .then(response => {
+        console.log('response', response);
+        if (response.data.errors) {
+          setError({
+            ...error,
+            messages: [...response.data.errors], 
+            code: response.data.status
+          })
+        }
         getSchedule();
+      })
+      .catch(errors => {
+        setError({
+          ...error,
+          messages: [errors], 
+          code: "500"
+        })
       })
   }
 
@@ -98,13 +120,24 @@ const Schedule = () => {
   // Splice out the day of the week, add commas to the date
   // Output should be e.g. "Aug 30, 2021"
   const getDate = (date) => {
-    // Specify timezone to prevent date from decrementing as UTC
-    let newDate = new Date(`${date} 00:00:00 PDT`).toDateString().split('')
-    newDate.splice(0,3);
-    newDate.splice(-5,0, ',');
-    newDate = newDate.join('');
+    console.log('date', date);
+    let newDate = date.split('/');
+    const months = {
+      '01': "Jan",
+      '02': "Feb",
+      '03': "Mar",
+      '04': "Apr",
+      '05': "May",
+      '06': "Jun",
+      '07': "Jul",
+      '08': "Aug",
+      '09': "Sep",
+      '10': "Oct",
+      '11': "Nov",
+      '12': "Dec"
+    }
 
-    return newDate;
+    return `${months[newDate[0]]} ${newDate[1]}, ${newDate[2]}`;
   }
 
   // Need to specify that only managers of this team can add/remove players

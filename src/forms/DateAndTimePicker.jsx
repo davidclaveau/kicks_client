@@ -37,8 +37,8 @@ const DateAndTimePicker = () => {
     
     // Day of week as number  
     const gameDay = daysOfWeek[selectedDate.getDay()];
-    // Date as yyyy-mm-dd
-    const gameDate = selectedDate.toISOString().slice(0,10)
+    // Date as dd/mm/yyyy
+    const gameDate = selectedDate.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}).slice(0,10)
     // Get year to indicate the season
     const year = selectedDate.getFullYear();
     // Time as 24-hour, e.g. "18:00"
